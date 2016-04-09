@@ -100,52 +100,71 @@ class Player:
         return in_spectre
 
     def is_hand_good_push_fold(self, first_card, second_card):
-        if self.M >= 8:
-            if self.my_pos == 1:
-                spectre = "22+ Kx+ Q2s+ Q8o+ J3s+ J8o+ T4s+ T8o+ 95s+ 97o+ 85s+ 87o 74s+ 76o 64s+ 53s+"
-            elif self.my_pos == 0:
-                spectre = "22+ A8s+ A5s ATo+ K9s+ KQo Q9s+ J9s+ T9s"
-            elif self.my_pos == 6:
-                spectre = "22+ A8s+ A5s ATo+ K9s+ KQo Q9s+ J9s+ T9s"
-            elif self.my_pos == 5:
-                spectre = "22+ A8s+ A5s ATo+ K9s+ KQo Q9s+ J9s+ T9s"
-            elif self.my_pos == 4:
-                spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q8s+ QJo J8s+ T8s+ 98s"
-            elif self.my_pos == 3:
-                spectre = "22+ A2s+ A7o+ A5o K7s+ KTo+ Q8s+ QTo+ J8s+ JTo T8s+ 98s 87s"
-            elif self.my_pos == 2:
-                spectre = "22+ Ax+ K5s+ KTo+ Q8s+ QTo+ J8s+ JTo T8s+ 97s+ 87s 76s"
-        elif self.M >= 7:
-            if self.my_pos == 1:
-                spectre = "22+ Kx+ Q2s+ Q5o+ J2s+ J7o+ T4s+ T8o+ 95s+ 97o+ 85s+ 87o 74s+ 76o 64s+ 53s+"
-            elif self.my_pos == 0:
-                spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q9s+ QJo J9s+ T9s 98s"
-            elif self.my_pos == 6:
-                spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q9s+ QJo J9s+ T9s 98s"
-            elif self.my_pos == 5:
-                spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q9s+ QJo J9s+ T9s 98s"
-            elif self.my_pos == 4:
-                spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J8s+ JTo T8s+ 98s"
-            elif self.my_pos == 3:
-                spectre = "22+ Ax+ K7s+ KTo+ Q9s+ QJo J8s+ JTo T8s+ 98s 87s"
-            elif self.my_pos == 2:
-                spectre = "22+ Ax+ K4s+ K9o+ Q8s+ QTo+ J8s+ JTo T7s+ 97s+ 86s+ 76s 65s"
-        elif self.M >= 6:
-            if self.my_pos == 1:
-                spectre = "22+ Qx+ J2s+ J4o+ T2s+ T6o+ 93s+ 96o+ 84s+ 86o+ 74s+ 76o 63s+ 53s+ 43s"
-            elif self.my_pos == 0:
-                spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
-            elif self.my_pos == 6:
-                spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
-            elif self.my_pos == 5:
-                spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
-            elif self.my_pos == 4:
-                spectre = "22+ A2s+ A4o+ K8s+ KTo+ Q9s+ QJo J8s+ JTo T8s+ 98s 87s"
-            elif self.my_pos == 3:
-                spectre = "22+ Ax+ K6s+ KTo+ Q9s+ QTo+ J8s+ JTo T8s+ 97s+ 87s"
-            elif self.my_pos == 2:
-                spectre = "22+ Ax+ K2s+ K7o+ Q8s+ QTo+ J8s+ JTo T7s+ 97s+ 86s+ 76s 65s"
+        if self.game_state['current_buy_in'] == 0:
+            if self.M >= 8:
+                if self.my_pos == 1:
+                    spectre = "22+ Kx+ Q2s+ Q8o+ J3s+ J8o+ T4s+ T8o+ 95s+ 97o+ 85s+ 87o 74s+ 76o 64s+ 53s+"
+                elif self.my_pos == 0:
+                    spectre = "22+ A8s+ A5s ATo+ K9s+ KQo Q9s+ J9s+ T9s"
+                elif self.my_pos == 6:
+                    spectre = "22+ A8s+ A5s ATo+ K9s+ KQo Q9s+ J9s+ T9s"
+                elif self.my_pos == 5:
+                    spectre = "22+ A8s+ A5s ATo+ K9s+ KQo Q9s+ J9s+ T9s"
+                elif self.my_pos == 4:
+                    spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q8s+ QJo J8s+ T8s+ 98s"
+                elif self.my_pos == 3:
+                    spectre = "22+ A2s+ A7o+ A5o K7s+ KTo+ Q8s+ QTo+ J8s+ JTo T8s+ 98s 87s"
+                elif self.my_pos == 2:
+                    spectre = "22+ Ax+ K5s+ KTo+ Q8s+ QTo+ J8s+ JTo T8s+ 97s+ 87s 76s"
+            elif self.M >= 7:
+                if self.my_pos == 1:
+                    spectre = "22+ Kx+ Q2s+ Q5o+ J2s+ J7o+ T4s+ T8o+ 95s+ 97o+ 85s+ 87o 74s+ 76o 64s+ 53s+"
+                elif self.my_pos == 0:
+                    spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q9s+ QJo J9s+ T9s 98s"
+                elif self.my_pos == 6:
+                    spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q9s+ QJo J9s+ T9s 98s"
+                elif self.my_pos == 5:
+                    spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q9s+ QJo J9s+ T9s 98s"
+                elif self.my_pos == 4:
+                    spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J8s+ JTo T8s+ 98s"
+                elif self.my_pos == 3:
+                    spectre = "22+ Ax+ K7s+ KTo+ Q9s+ QJo J8s+ JTo T8s+ 98s 87s"
+                elif self.my_pos == 2:
+                    spectre = "22+ Ax+ K4s+ K9o+ Q8s+ QTo+ J8s+ JTo T7s+ 97s+ 86s+ 76s 65s"
+            elif self.M >= 6:
+                if self.my_pos == 1:
+                    spectre = "22+ Qx+ J2s+ J4o+ T2s+ T6o+ 93s+ 96o+ 84s+ 86o+ 74s+ 76o 63s+ 53s+ 43s"
+                elif self.my_pos == 0:
+                    spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
+                elif self.my_pos == 6:
+                    spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
+                elif self.my_pos == 5:
+                    spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
+                elif self.my_pos == 4:
+                    spectre = "22+ A2s+ A4o+ K8s+ KTo+ Q9s+ QJo J8s+ JTo T8s+ 98s 87s"
+                elif self.my_pos == 3:
+                    spectre = "22+ Ax+ K6s+ KTo+ Q9s+ QTo+ J8s+ JTo T8s+ 97s+ 87s"
+                elif self.my_pos == 2:
+                    spectre = "22+ Ax+ K2s+ K7o+ Q8s+ QTo+ J8s+ JTo T7s+ 97s+ 86s+ 76s 65s"
+            else:
+                if self.my_pos == 1:
+                    spectre = "22+ Qx+ J2s+ J3o+ T2s+ T6o+ 94s+ 96o+ 84s+ 86o+ 74s+ 76o 64s+ 53s+"
+                elif self.my_pos == 0:
+                    spectre = "22+ A2s+ A7o+ A5o K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
+                elif self.my_pos == 6:
+                    spectre = "22+ A2s+ A7o+ A5o K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
+                elif self.my_pos == 5:
+                    spectre = "22+ A2s+ A7o+ A5o K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
+                elif self.my_pos == 4:
+                    spectre = "22+ A2s+ A3o+ K7s+ KTo+ Q9s+ QTo+ J9s+ T8s+ 98s"
+                elif self.my_pos == 3:
+                    spectre = "22+ Ax+ K4s+ K9o+ Q8s+ QTo+ J8s+ JTo T8s+ 97s+ 87s"
+                elif self.my_pos == 2:
+                    spectre = "22+ Ax+ K2s+ K6o+ Q7s+ Q9o+ J8s+ JTo T8s+ 97s+ 87s 76s"
         else:
+            spectre = "77 A9 KJ QJ"
+
+        if not spectre:
             spectre = "77 A9 KJ QJ"
 
         in_spectre = self.is_hand_in_spectre(spectre, first_card, second_card)
