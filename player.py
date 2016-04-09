@@ -49,10 +49,10 @@ class Player:
         result = requests.get('http://rainman.leanpoker.org/rank', data={'cards': json.dumps(cards)})
         if result.status_code == 200:
             result = json.loads(result.content)
-            rank = result['rank']
+            rank = result
 
         else:
-            rank = 0
+            rank = {}
 
         return rank
 
@@ -64,7 +64,7 @@ class Player:
 
         return {}
 
-    def is_hand_good(self, is_wide = False):
+    def is_hand_good(self, is_wide=False):
         self_player_data = self.get_self_player_data()
         my_cards = self_player_data['hole_cards']
         is_hand_good = False
@@ -104,8 +104,13 @@ class Player:
 
         return is_good
 
-    def is_good_range(self, my_cards):
+    def is_good_rank(self):
         is_good = False
+
+        rank = self.get_current_rank(self.game_state)
+        if rank >= 2:
+            is_good = True
+
         return is_good
 
     def get_active_players_count(self):
@@ -118,13 +123,22 @@ class Player:
     def betRequest(self, game_state):
         self.game_state = game_state
 
-        M = game_state['pot'] / (game_state['small_blind'] * 3)
         bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
         active_players_count = self.get_active_players_count()
         if active_players_count >= 3:
             is_hand_good = self.is_hand_good()
         else:
             is_hand_good = self.is_hand_good(True)
+
+        common_cards_count = len(self.game_state['community_cards'])
+
+        if common_cards_count >= 3:
+            rank_data = self.get_current_rank(self.game_state)
+            rank = rank_data['rank']
+            if rank >= 1:
+                is_hand_good = True
+            elif rank == 0:
+                is_hand_good = False
 
         if not is_hand_good:
             if game_state['current_buy_in'] > 0:
