@@ -85,9 +85,11 @@ class Player:
 
     def is_hand_good_narrow(self, first_card, second_card):
         is_good = False
-        if first_card['rank'] in ['Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
+        if first_card['rank'] in ['10', 'J', 'Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
             is_good = True
-        if first_card['rank'] == 'A' and second_card['rank'] in ['K', 'A']:
+        if first_card['rank'] == 'A' and second_card['rank'] in ['J', 'Q', 'K', 'A']:
+            is_good = True
+        if first_card['rank'] == 'K' and second_card['rank'] in ['Q', 'K', 'A']:
             is_good = True
 
         return is_good
