@@ -1,3 +1,4 @@
+import json
 
 class Player:
     VERSION = "Default Python folding player"
@@ -36,7 +37,43 @@ class Player:
     # }
 
     def betRequest(self, game_state):
-        return max(game_state['small_blind'] * 8, game_state['current_buy_in'])
+        bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
+        self_player_data = self.getSelfPlayerData(game_state)
+        my_cards = self_player_data['hole_cards']
+        is_pair = False
+        bet_more = False
+        first_card = ''
+        for key in my_cards:
+            card = my_cards[key]
+            if first_card and first_card == card['rank']:
+                bet_more = True
+            if first_card == '':
+                first_card = card['rank']
+            if card['rank'] == 'T' or card['rank'] == 'K':
+                bet_more = True
+
+        if bet_more:
+            bet = 1000
+
+        return bet
+
+    # def getCurrentRank(self, game_state):
+    #     self_player_data = self.getSelfPlayerData(game_state)
+    #     my_cards = self_player_data['hole_cards']
+    #     common_cards = game_state['community_cards']
+    #     cards = my_cards + common_cards
+    #     cards = json.dumps(cards)
+    #
+    #
+    #     return rank
+
+    def getSelfPlayerData(self, game_state):
+        selfIndex = game_state['in_action']
+        for player in game_state['players']:
+            if player['id'] == selfIndex:
+                return player
+        return {}
+
 
     def showdown(self, game_state):
         pass
