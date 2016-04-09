@@ -38,24 +38,28 @@ class Player:
 
     def betRequest(self, game_state):
         bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
-        self_player_data = self.getSelfPlayerData(game_state)
-        my_cards = self_player_data['hole_cards']
-        is_pair = False
-        bet_more = False
-        first_card = ''
-        for key in my_cards:
-            card = my_cards[key]
-            if first_card and first_card == card['rank']:
-                bet_more = True
-            if first_card == '':
-                first_card = card['rank']
-            if card['rank'] == 'T' or card['rank'] == 'K':
-                bet_more = True
+        bet_more = self.is_hand_good(game_state)
 
         if bet_more:
             bet = 1000
 
         return bet
+
+    def is_hand_good(self, game_state):
+        self_player_data = self.getSelfPlayerData(game_state)
+        my_cards = self_player_data['hole_cards']
+        is_hand_good = False
+        first_card = ''
+        for key in my_cards:
+            card = my_cards[key]
+            if first_card and first_card == card['rank']:
+                is_hand_good = True
+            if first_card == '':
+                first_card = card['rank']
+            if card['rank'] == 'A' or card['rank'] == 'K':
+                is_hand_good = True
+        return is_hand_good
+
 
     # def getCurrentRank(self, game_state):
     #     self_player_data = self.getSelfPlayerData(game_state)
