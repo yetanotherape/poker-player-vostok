@@ -43,7 +43,8 @@ class Player:
         if bet_more:
             bet = 1000
         else:
-            bet = 0
+            if game_state['current_buy_in'] > 0:
+                bet = 0
 
         return bet
 
