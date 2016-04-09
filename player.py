@@ -42,6 +42,8 @@ class Player:
 
         if bet_more:
             bet = 1000
+        else:
+            bet = 0
 
         return bet
 
@@ -59,6 +61,9 @@ class Player:
                 is_hand_good = True
         return is_hand_good
 
+    def is_good_range(self, my_cards):
+        is_good = False
+        return is_good
 
     # def getCurrentRank(self, game_state):
     #     self_player_data = self.getSelfPlayerData(game_state)
