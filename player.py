@@ -164,8 +164,9 @@ class Player:
                 is_hand_good = False
 
         if not is_hand_good:
-            if game_state['current_buy_in'] > 0:
-                bet = 0
+            bet = 0
+            # if game_state['current_buy_in'] > 0:
+            #     bet = 0
         return bet
 
     def get_bet_for_push_fold(self):
