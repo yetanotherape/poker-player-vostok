@@ -1,5 +1,8 @@
 import json
 
+import requests
+
+
 class Player:
     VERSION = "Default Python folding player"
 
@@ -36,20 +39,32 @@ class Player:
     #     "pot": 0
     # }
 
-    def betRequest(self, game_state):
-        bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
-        bet_more = self.is_hand_good(game_state)
+    def get_current_rank(self, game_state):
+        self_player_data = self.get_self_player_data(game_state)
+        my_cards = self_player_data['hole_cards']
+        common_cards = game_state['community_cards']
+        cards = my_cards + common_cards
 
-        if bet_more:
-            bet = 1000
+        result = requests.get('http://rainman.leanpoker.org/rank', data={'cards': json.dumps(cards)})
+        if result.status_code == 200:
+            result = json.loads(result.content)
+            rank = result['rank']
+
         else:
-            if game_state['current_buy_in'] > 0:
-                bet = 0
+            rank = 0
 
-        return bet
+        return rank
+
+    def get_self_player_data(self, game_state):
+        self_id = game_state['in_action']
+        for player in game_state['players']:
+            if player['id'] == self_id:
+                return player
+
+        return {}
 
     def is_hand_good(self, game_state):
-        self_player_data = self.getSelfPlayerData(game_state)
+        self_player_data = self.get_self_player_data(game_state)
         my_cards = self_player_data['hole_cards']
         is_hand_good = False
         first_card = ''
@@ -66,23 +81,17 @@ class Player:
         is_good = False
         return is_good
 
-    # def getCurrentRank(self, game_state):
-    #     self_player_data = self.getSelfPlayerData(game_state)
-    #     my_cards = self_player_data['hole_cards']
-    #     common_cards = game_state['community_cards']
-    #     cards = my_cards + common_cards
-    #     cards = json.dumps(cards)
-    #
-    #
-    #     return rank
+    def betRequest(self, game_state):
+        bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
+        bet_more = self.is_hand_good(game_state)
 
-    def getSelfPlayerData(self, game_state):
-        selfIndex = game_state['in_action']
-        for player in game_state['players']:
-            if player['id'] == selfIndex:
-                return player
-        return {}
+        if bet_more:
+            bet = 1000
+        else:
+            if game_state['current_buy_in'] > 0:
+                bet = 0
 
+        return bet
 
     def showdown(self, game_state):
         pass
