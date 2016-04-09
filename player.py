@@ -64,7 +64,7 @@ class Player:
 
         return {}
 
-    def is_hand_good(self, is_wide=False):
+    def is_hand_good(self, is_wide=False, is_push_fold=False):
         self_player_data = self.get_self_player_data()
         my_cards = self_player_data['hole_cards']
         is_hand_good = False
@@ -74,6 +74,9 @@ class Player:
         if is_wide:
             is_hand_good = is_hand_good or self.is_hand_good_wide(first_card, second_card)
             is_hand_good = is_hand_good or self.is_hand_good_wide(second_card, first_card)
+        elif is_push_fold:
+            is_hand_good = is_hand_good or self.is_hand_good_push_fold(first_card, second_card)
+            is_hand_good = is_hand_good or self.is_hand_good_push_fold(second_card, first_card)
         else:
             is_hand_good = is_hand_good or self.is_hand_good_narrow(first_card, second_card)
             is_hand_good = is_hand_good or self.is_hand_good_narrow(second_card, first_card)
@@ -104,6 +107,19 @@ class Player:
 
         return is_good
 
+    def is_hand_good_push_fold(self, first_card, second_card):
+        is_good = False
+        if first_card['rank'] in ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
+            is_good = True
+        if first_card['rank'] == 'A' and second_card['rank'] in ['9', '10', 'J', 'Q', 'K', 'A']:
+            is_good = True
+        if first_card['rank'] == 'K' and second_card['rank'] in ['J', 'Q', 'K', 'A']:
+            is_good = True
+        if first_card['rank'] == 'Q' and second_card['rank'] in ['J', 'Q', 'K', 'A']:
+            is_good = True
+
+        return is_good
+
     def is_good_rank(self):
         is_good = False
 
@@ -120,9 +136,8 @@ class Player:
                 active_count += 1
         return active_count
 
-    def betRequest(self, game_state):
-        self.game_state = game_state
-
+    def get_bet_for_calm_game(self):
+        game_state = self.game_state
         bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
         active_players_count = self.get_active_players_count()
         if active_players_count >= 3:
@@ -143,6 +158,31 @@ class Player:
         if not is_hand_good:
             if game_state['current_buy_in'] > 0:
                 bet = 0
+        return bet
+
+    def get_bet_for_push_fold(self):
+        bet = 0
+
+        is_hand_good = self.is_hand_good(is_push_fold=True)
+
+        if is_hand_good:
+            bet = 1000000
+
+        return bet
+
+    def betRequest(self, game_state):
+        self.game_state = game_state
+
+        self_player_data = self.get_self_player_data()
+        if game_state['bet_index'] == 0:
+            M = self_player_data['stack'] / (game_state['small_blind'] * 3)
+        else:
+            M = 100
+
+        if M > 10:
+            bet = self.get_bet_for_calm_game()
+        else:
+            bet = self.get_bet_for_push_fold()
 
         return bet
 
