@@ -94,7 +94,7 @@ class Player:
         return in_spectre
 
     def is_hand_good_wide(self, first_card, second_card):
-        in_spectre = self.is_hand_in_spectre("66 A6 K9 QT JT", first_card, second_card)
+        in_spectre = self.is_hand_in_spectre("22 A2 K7 Q9 JT", first_card, second_card)
 
         return in_spectre
 
