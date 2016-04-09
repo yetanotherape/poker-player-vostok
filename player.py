@@ -38,8 +38,9 @@ class Player:
 
     def betRequest(self, game_state):
         bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
-        bet_more = self.is_hand_good(game_state)
+        #bet_more = self.is_hand_good(game_state)
 
+        bet_more = False
         if bet_more:
             bet = 1000
 
