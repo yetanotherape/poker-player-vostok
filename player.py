@@ -5,6 +5,7 @@ import requests
 
 class Player:
     VERSION = "Default Python folding player"
+    game_state = {}
 
     # {
     #     "players": [
@@ -40,7 +41,7 @@ class Player:
     # }
 
     def get_current_rank(self, game_state):
-        self_player_data = self.get_self_player_data(game_state)
+        self_player_data = self.get_self_player_data()
         my_cards = self_player_data['hole_cards']
         common_cards = game_state['community_cards']
         cards = my_cards + common_cards
@@ -55,16 +56,16 @@ class Player:
 
         return rank
 
-    def get_self_player_data(self, game_state):
-        self_id = game_state['in_action']
-        for player in game_state['players']:
+    def get_self_player_data(self):
+        self_id = self.game_state['in_action']
+        for player in self.game_state['players']:
             if player['id'] == self_id:
                 return player
 
         return {}
 
-    def is_hand_good(self, game_state):
-        self_player_data = self.get_self_player_data(game_state)
+    def is_hand_good(self):
+        self_player_data = self.get_self_player_data()
         my_cards = self_player_data['hole_cards']
         is_hand_good = False
         first_card = ''
@@ -82,8 +83,10 @@ class Player:
         return is_good
 
     def betRequest(self, game_state):
+        self.game_state = game_state
+
         bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
-        bet_more = self.is_hand_good(game_state)
+        bet_more = self.is_hand_good()
 
         if bet_more:
             bet = 1000
