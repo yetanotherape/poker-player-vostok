@@ -64,24 +64,29 @@ class Player:
 
         return {}
 
-    def is_hand_good(self, is_wide=False, is_push_fold=False):
+    def is_hand_good(self, spectre='defalt'):
         self_player_data = self.get_self_player_data()
         my_cards = self_player_data['hole_cards']
-        is_hand_good = False
         first_card = my_cards[0]
         second_card = my_cards[1]
 
-        if is_wide:
-            is_hand_good = is_hand_good or self.is_hand_good_wide(first_card, second_card)
-            is_hand_good = is_hand_good or self.is_hand_good_wide(second_card, first_card)
-        elif is_push_fold:
-            is_hand_good = is_hand_good or self.is_hand_good_push_fold(first_card, second_card)
-            is_hand_good = is_hand_good or self.is_hand_good_push_fold(second_card, first_card)
+        if spectre == 'wide':
+            func = self.is_hand_good_wide
+        elif spectre == 'push_fold':
+            func = self.is_hand_good_push_fold
         else:
-            is_hand_good = is_hand_good or self.is_hand_good_narrow(first_card, second_card)
-            is_hand_good = is_hand_good or self.is_hand_good_narrow(second_card, first_card)
+            func = self.is_hand_good_narrow
+
+        is_hand_good = self.rotate_cards(func, first_card, second_card)
 
         return is_hand_good
+
+    def rotate_cards(self, func, first_card, second_card):
+        is_hand_good = func(first_card, second_card)
+        is_hand_good = is_hand_good or func(second_card, first_card)
+
+        return is_hand_good
+
 
     def is_hand_good_narrow(self, first_card, second_card):
         is_good = False
@@ -145,7 +150,7 @@ class Player:
         if active_players_count >= 3:
             is_hand_good = self.is_hand_good()
         else:
-            is_hand_good = self.is_hand_good(True)
+            is_hand_good = self.is_hand_good(spectre='wide')
 
         common_cards_count = len(self.game_state['community_cards'])
 
@@ -165,17 +170,18 @@ class Player:
     def get_bet_for_push_fold(self):
         bet = 0
 
-        is_hand_good = self.is_hand_good(is_push_fold=True)
+        is_hand_good = self.is_hand_good(spectre="push_fold")
 
         if is_hand_good:
             bet = 1000000
 
         return bet
 
-    def betRequest(self, game_state):
+    def bet_request(self, game_state):
         self.game_state = game_state
 
         self_player_data = self.get_self_player_data()
+
         if game_state['bet_index'] == 0:
             M = self_player_data['stack'] / (game_state['small_blind'] * 3)
         else:
