@@ -82,9 +82,9 @@ class Player:
 
     def is_hand_good_narrow(self, first_card, second_card):
         is_good = False
-        if first_card['rank'] in ['J', 'Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
+        if first_card['rank'] in ['Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
             is_good = True
-        if first_card['rank'] == 'A' and second_card['rank'] in ['Q', 'K', 'A']:
+        if first_card['rank'] == 'A' and second_card['rank'] in ['K', 'A']:
             is_good = True
 
         return is_good
@@ -118,6 +118,7 @@ class Player:
     def betRequest(self, game_state):
         self.game_state = game_state
 
+        M = game_state['pot'] / (game_state['small_blind'] * 3)
         bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
         active_players_count = self.get_active_players_count()
         if active_players_count >= 3:
