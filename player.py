@@ -99,11 +99,9 @@ class Player:
         self.game_state = game_state
 
         bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
-        bet_more = self.is_hand_good()
+        is_hand_good = self.is_hand_good()
 
-        if bet_more:
-            bet = 1000
-        else:
+        if not is_hand_good:
             if game_state['current_buy_in'] > 0:
                 bet = 0
 
