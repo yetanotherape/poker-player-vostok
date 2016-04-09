@@ -64,19 +64,32 @@ class Player:
 
         return {}
 
-    def is_hand_good(self):
+    def is_hand_good(self, is_wide = False):
         self_player_data = self.get_self_player_data()
         my_cards = self_player_data['hole_cards']
         is_hand_good = False
         first_card = my_cards[0]
         second_card = my_cards[1]
 
-        is_hand_good = is_hand_good or self.is_hand_good_first_card(first_card, second_card)
-        is_hand_good = is_hand_good or self.is_hand_good_first_card(second_card, first_card)
+        if is_wide:
+            is_hand_good = is_hand_good or self.is_hand_good_wide(first_card, second_card)
+            is_hand_good = is_hand_good or self.is_hand_good_wide(second_card, first_card)
+        else:
+            is_hand_good = is_hand_good or self.is_hand_good_narrow(first_card, second_card)
+            is_hand_good = is_hand_good or self.is_hand_good_narrow(second_card, first_card)
 
         return is_hand_good
 
-    def is_hand_good_first_card(self, first_card, second_card):
+    def is_hand_good_narrow(self, first_card, second_card):
+        is_good = False
+        if first_card['rank'] in ['J', 'Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
+            is_good = True
+        if first_card['rank'] == 'A' and second_card['rank'] in ['Q', 'K', 'A']:
+            is_good = True
+
+        return is_good
+
+    def is_hand_good_wide(self, first_card, second_card):
         is_good = False
         if first_card['rank'] in ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
             is_good = True
@@ -95,11 +108,22 @@ class Player:
         is_good = False
         return is_good
 
+    def get_active_players_count(self):
+        active_count = 0
+        for player in self.game_state['players']:
+            if player['status'] != 'out':
+                active_count += 1
+        return active_count
+
     def betRequest(self, game_state):
         self.game_state = game_state
 
         bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
-        is_hand_good = self.is_hand_good()
+        active_players_count = self.get_active_players_count()
+        if active_players_count >= 3:
+            is_hand_good = self.is_hand_good()
+        else:
+            is_hand_good = self.is_hand_good(True)
 
         if not is_hand_good:
             if game_state['current_buy_in'] > 0:
