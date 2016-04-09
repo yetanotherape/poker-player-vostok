@@ -36,7 +36,7 @@ class Player:
     # }
 
     def betRequest(self, game_state):
-        return min(game_state['small_blind'] * 8, game_state['current_buy_in'])
+        return max(game_state['small_blind'] * 8, game_state['current_buy_in'])
 
     def showdown(self, game_state):
         pass
