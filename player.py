@@ -6,6 +6,7 @@ import requests
 class Player:
     VERSION = "Default Python folding player"
     game_state = {}
+    M = 100
 
     # {
     #     "players": [
@@ -64,7 +65,7 @@ class Player:
 
         return {}
 
-    def is_hand_good(self, spectre='defalt'):
+    def is_hand_good(self, spectre='default'):
         self_player_data = self.get_self_player_data()
         my_cards = self_player_data['hole_cards']
         first_card = my_cards[0]
@@ -87,45 +88,45 @@ class Player:
 
         return is_hand_good
 
-
     def is_hand_good_narrow(self, first_card, second_card):
-        is_good = False
-        if first_card['rank'] in ['10', 'J', 'Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
-            is_good = True
-        if first_card['rank'] == 'A' and second_card['rank'] in ['J', 'Q', 'K', 'A']:
-            is_good = True
-        if first_card['rank'] == 'K' and second_card['rank'] in ['Q', 'K', 'A']:
-            is_good = True
+        in_spectre = self.is_hand_in_spectre("TT AJ KQ", first_card, second_card)
 
-        return is_good
+        return in_spectre
 
     def is_hand_good_wide(self, first_card, second_card):
-        is_good = False
-        if first_card['rank'] in ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
-            is_good = True
-        if first_card['rank'] == 'A' and second_card['rank'] in ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']:
-            is_good = True
-        if first_card['rank'] == 'K' and second_card['rank'] in ['9', '10', 'J', 'Q', 'K', 'A']:
-            is_good = True
-        if first_card['rank'] == 'Q' and second_card['rank'] in ['10', 'J', 'Q', 'K', 'A']:
-            is_good = True
-        if first_card['rank'] == 'J' and second_card['rank'] in ['10', 'J', 'Q', 'K', 'A']:
-            is_good = True
+        in_spectre = self.is_hand_in_spectre("66 A6 K9 QT JT", first_card, second_card)
 
-        return is_good
+        return in_spectre
 
     def is_hand_good_push_fold(self, first_card, second_card):
-        is_good = False
-        if first_card['rank'] in ['7', '8', '9', '10', 'J', 'Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
-            is_good = True
-        if first_card['rank'] == 'A' and second_card['rank'] in ['9', '10', 'J', 'Q', 'K', 'A']:
-            is_good = True
-        if first_card['rank'] == 'K' and second_card['rank'] in ['J', 'Q', 'K', 'A']:
-            is_good = True
-        if first_card['rank'] == 'Q' and second_card['rank'] in ['J', 'Q', 'K', 'A']:
-            is_good = True
+        in_spectre = self.is_hand_in_spectre("77 A9 KJ QJ", first_card, second_card)
 
-        return is_good
+        return in_spectre
+
+    def is_hand_in_spectre(self, spectre, first_card, second_card):
+        cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+        first_card_index = cards.index(first_card['rank'])
+        second_card_index = cards.index(second_card['rank'])
+
+        hands = spectre.split(" ")
+        in_spectre = False
+        cards_spectre = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A']
+        for hand in hands:
+            first_card_in_hand = hand[0]
+            second_card_in_hand = hand[1]
+            first_cards_in_hand_index = cards_spectre.index(first_card_in_hand)
+            second_cards_in_hand_index = cards_spectre.index(second_card_in_hand)
+
+            if first_cards_in_hand_index == second_cards_in_hand_index:
+                if first_card_index == second_card_index and first_card_index >= first_cards_in_hand_index:
+                    in_spectre = True
+            elif first_card_index >= first_cards_in_hand_index and second_card_index >= second_cards_in_hand_index:
+                in_spectre = True
+                break
+
+        return in_spectre
+
+
 
     def is_good_rank(self):
         is_good = False
@@ -186,6 +187,8 @@ class Player:
             M = self_player_data['stack'] / (game_state['small_blind'] * 3)
         else:
             M = 100
+
+        self.M = M
 
         if M > 10:
             bet = self.get_bet_for_calm_game()
