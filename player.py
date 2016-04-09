@@ -38,9 +38,8 @@ class Player:
 
     def betRequest(self, game_state):
         bet = max(game_state['small_blind'] * 8, game_state['current_buy_in'])
-        #bet_more = self.is_hand_good(game_state)
+        bet_more = self.is_hand_good(game_state)
 
-        bet_more = False
         if bet_more:
             bet = 1000
 
@@ -51,8 +50,7 @@ class Player:
         my_cards = self_player_data['hole_cards']
         is_hand_good = False
         first_card = ''
-        for key in my_cards:
-            card = my_cards[key]
+        for card in my_cards:
             if first_card and first_card == card['rank']:
                 is_hand_good = True
             if first_card == '':
