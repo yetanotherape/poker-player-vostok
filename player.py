@@ -100,7 +100,7 @@ class Player:
         return in_spectre
 
     def is_hand_good_push_fold(self, first_card, second_card):
-        if self.M <= 8:
+        if self.M >= 8:
             if self.my_pos == 1:
                 spectre = "22+ Kx+ Q2s+ Q8o+ J3s+ J8o+ T4s+ T8o+ 95s+ 97o+ 85s+ 87o 74s+ 76o 64s+ 53s+"
             elif self.my_pos == 0:
@@ -115,6 +115,21 @@ class Player:
                 spectre = "22+ A2s+ A7o+ A5o K7s+ KTo+ Q8s+ QTo+ J8s+ JTo T8s+ 98s 87s"
             elif self.my_pos == 2:
                 spectre = "22+ Ax+ K5s+ KTo+ Q8s+ QTo+ J8s+ JTo T8s+ 97s+ 87s 76s"
+        elif self.M >= 7:
+            if self.my_pos == 1:
+                spectre = "22+ Kx+ Q2s+ Q5o+ J2s+ J7o+ T4s+ T8o+ 95s+ 97o+ 85s+ 87o 74s+ 76o 64s+ 53s+"
+            elif self.my_pos == 0:
+                spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q9s+ QJo J9s+ T9s 98s"
+            elif self.my_pos == 6:
+                spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q9s+ QJo J9s+ T9s 98s"
+            elif self.my_pos == 5:
+                spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q9s+ QJo J9s+ T9s 98s"
+            elif self.my_pos == 4:
+                spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J8s+ JTo T8s+ 98s"
+            elif self.my_pos == 3:
+                spectre = "22+ Ax+ K7s+ KTo+ Q9s+ QJo J8s+ JTo T8s+ 98s 87s"
+            elif self.my_pos == 2:
+                spectre = "22+ Ax+ K4s+ K9o+ Q8s+ QTo+ J8s+ JTo T7s+ 97s+ 86s+ 76s 65s"
         else:
             spectre = "77 A9 KJ QJ"
 
