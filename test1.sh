@@ -8,7 +8,7 @@ curl -d 'action=bet_request&game_state={
       "status":"active",
       "bet":0,
       "hole_cards":[{
-                    "rank": "6",
+                    "rank": "9",
                     "suit": "hearts"
                 },
                 {

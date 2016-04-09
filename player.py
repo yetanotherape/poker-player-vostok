@@ -68,15 +68,28 @@ class Player:
         self_player_data = self.get_self_player_data()
         my_cards = self_player_data['hole_cards']
         is_hand_good = False
-        first_card = ''
-        for card in my_cards:
-            if first_card and first_card == card['rank']:
-                is_hand_good = True
-            if first_card == '':
-                first_card = card['rank']
-            if card['rank'] == 'A' or card['rank'] == 'K':
-                is_hand_good = True
+        first_card = my_cards[0]
+        second_card = my_cards[1]
+
+        is_hand_good = is_hand_good or self.is_hand_good_first_card(first_card, second_card)
+        is_hand_good = is_hand_good or self.is_hand_good_first_card(second_card, first_card)
+
         return is_hand_good
+
+    def is_hand_good_first_card(self, first_card, second_card):
+        is_good = False
+        if first_card['rank'] in ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'] and first_card['rank'] == second_card['rank']:
+            is_good = True
+        if first_card['rank'] == 'A' and second_card['rank'] in ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']:
+            is_good = True
+        if first_card['rank'] == 'K' and second_card['rank'] in ['9', '10', 'J', 'Q', 'K', 'A']:
+            is_good = True
+        if first_card['rank'] == 'Q' and second_card['rank'] in ['10', 'J', 'Q', 'K', 'A']:
+            is_good = True
+        if first_card['rank'] == 'J' and second_card['rank'] in ['10', 'J', 'Q', 'K', 'A']:
+            is_good = True
+
+        return is_good
 
     def is_good_range(self, my_cards):
         is_good = False
