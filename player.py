@@ -103,17 +103,17 @@ class Player:
         if self.M <= 8:
             if self.my_pos == 1:
                 spectre = "22+ Kx+ Q2s+ Q8o+ J3s+ J8o+ T4s+ T8o+ 95s+ 97o+ 85s+ 87o 74s+ 76o 64s+ 53s+"
-            elif self.my_pos == 2:
+            elif self.my_pos == 0:
                 spectre = "22+ A8s+ A5s ATo+ K9s+ KQo Q9s+ J9s+ T9s"
-            elif self.my_pos == 3:
-                spectre = "22+ A8s+ A5s ATo+ K9s+ KQo Q9s+ J9s+ T9s"
-            elif self.my_pos == 4:
+            elif self.my_pos == 6:
                 spectre = "22+ A8s+ A5s ATo+ K9s+ KQo Q9s+ J9s+ T9s"
             elif self.my_pos == 5:
+                spectre = "22+ A8s+ A5s ATo+ K9s+ KQo Q9s+ J9s+ T9s"
+            elif self.my_pos == 4:
                 spectre = "22+ A7s+ A5s-A3s ATo+ K8s+ KJo+ Q8s+ QJo J8s+ T8s+ 98s"
-            elif self.my_pos == 6:
+            elif self.my_pos == 3:
                 spectre = "22+ A2s+ A7o+ A5o K7s+ KTo+ Q8s+ QTo+ J8s+ JTo T8s+ 98s 87s"
-            elif self.my_pos == 7:
+            elif self.my_pos == 2:
                 spectre = "22+ Ax+ K5s+ KTo+ Q8s+ QTo+ J8s+ JTo T8s+ 97s+ 87s 76s"
         else:
             spectre = "77 A9 KJ QJ"
@@ -201,10 +201,27 @@ class Player:
 
         self_player_data = self.get_self_player_data()
 
-        if self_player_data['id'] > self.game_state['dealer']:
-            my_pos = self_player_data['id'] - self.game_state['dealer']
-        else:
-            my_pos = len(self.game_state['players']) - abs(self_player_data['id'] - self.game_state['dealer'])
+        players = self.game_state['players'] + self.game_state['players']
+
+        is_dealer_found = False
+        pos = 0
+        my_pos = 0
+        for player in players:
+            if player['id'] > self.game_state['dealer']:
+                if player['status'] != 'out':
+                    pos += 1
+                if player['id'] == self_player_data['id']:
+                    my_pos = pos
+            elif player['id'] == self.game_state['dealer'] and is_dealer_found:
+                break
+            elif player['id'] == self.game_state['dealer']:
+                is_dealer_found = True
+
+        total_active = pos
+        if my_pos >= 2:
+            my_pos = total_active + 2 - my_pos
+        elif my_pos == 2:
+            my_pos = 0
 
         self.my_pos = my_pos
 
