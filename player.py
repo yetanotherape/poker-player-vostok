@@ -130,6 +130,21 @@ class Player:
                 spectre = "22+ Ax+ K7s+ KTo+ Q9s+ QJo J8s+ JTo T8s+ 98s 87s"
             elif self.my_pos == 2:
                 spectre = "22+ Ax+ K4s+ K9o+ Q8s+ QTo+ J8s+ JTo T7s+ 97s+ 86s+ 76s 65s"
+        elif self.M >= 6:
+            if self.my_pos == 1:
+                spectre = "22+ Qx+ J2s+ J4o+ T2s+ T6o+ 93s+ 96o+ 84s+ 86o+ 74s+ 76o 63s+ 53s+ 43s"
+            elif self.my_pos == 0:
+                spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
+            elif self.my_pos == 6:
+                spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
+            elif self.my_pos == 5:
+                spectre = "22+ A2s+ A8o+ K8s+ KTo+ Q9s+ QJo J9s+ T8s+ 98s"
+            elif self.my_pos == 4:
+                spectre = "22+ A2s+ A4o+ K8s+ KTo+ Q9s+ QJo J8s+ JTo T8s+ 98s 87s"
+            elif self.my_pos == 3:
+                spectre = "22+ Ax+ K6s+ KTo+ Q9s+ QTo+ J8s+ JTo T8s+ 97s+ 87s"
+            elif self.my_pos == 2:
+                spectre = "22+ Ax+ K2s+ K7o+ Q8s+ QTo+ J8s+ JTo T7s+ 97s+ 86s+ 76s 65s"
         else:
             spectre = "77 A9 KJ QJ"
 
